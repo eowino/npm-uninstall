@@ -1,0 +1,9 @@
+.vscode
+.git
+src
+.editorconfig
+.eslintignore
+.eslintrc.js
+.gitignore
+.prettierrc
+tsconfig.json

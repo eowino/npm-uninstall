@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        "moduleResolution": "node",
+        "removeComments": true,
+        "baseUrl": "./src/",
+        "module": "commonjs",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "outDir": "dist/",
+        "declaration": false,
+        "sourceMap": false,
+        "strictNullChecks": true,
+        "importHelpers": true,
+        "resolveJsonModule": true,
+        "typeRoots": ["node_modules/@types", "./typings"],
+        "types": ["@types/jest"]
+    },
+    "exclude": ["node_modules"]
+}
