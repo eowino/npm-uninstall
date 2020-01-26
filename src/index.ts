@@ -1,4 +1,4 @@
-import { spawn } from 'child_process';
+import { execSync } from 'child_process';
 import { existsSync } from 'fs';
 import inquirer from 'inquirer';
 import { join } from 'path';
@@ -16,7 +16,6 @@ enum DependencyType {
 }
 
 const MAX_CLIMB = 10;
-const EXIT_CODE_OK = 0;
 
 async function inquireDependencies({ dependencies, devDependencies, optionalDependencies }: IDependencies) {
     const { choice }: { choice: string } = await inquirer.prompt({
@@ -107,29 +106,6 @@ function getSaveFlag(dependencyType: DependencyType) {
     }
 }
 
-export async function spawnUninstall(dependencyType: DependencyType, dependencies: string[]): Promise<void> {
-    const saveFlag = getSaveFlag(dependencyType);
-    const npm = spawn('npm', ['uninstall', `--${saveFlag}`, ...dependencies]);
-
-    return new Promise((resolve, reject) => {
-        npm.stdout.on('data', (data) => console.log(String(data)));
-
-        npm.stderr.on('data', (data) => {
-            console.log(String(data));
-            reject();
-        });
-
-        npm.on('close', (code) => {
-            if (code !== EXIT_CODE_OK) {
-                console.log(`\nnpm-uninstall CLI exited with code ${code}`);
-            }
-
-            npm.stdin.end();
-            resolve();
-        });
-    });
-}
-
 function getDependencyType(depsToDelete: string[], allDependencies: IDependencies): IDependencies {
     const dependencies: string[] = [];
     const devDependencies: string[] = [];
@@ -169,14 +145,15 @@ function getDependencyType(depsToDelete: string[], allDependencies: IDependencie
 
     const formattedDepsToDelete = getDependencyType(depsToDelete, allDependencies);
 
-    for await (const type of Object.keys(formattedDepsToDelete)) {
+    Object.keys(formattedDepsToDelete).forEach((type) => {
         const dependencyType = type as DependencyType;
         const dependencies = formattedDepsToDelete[dependencyType];
+        const saveFlag = getSaveFlag(dependencyType);
 
         if (dependencies.length) {
             console.log('\n🛠  Uninstalling:', dependencies);
-            await spawnUninstall(dependencyType, dependencies);
+            execSync(`npm uninstall --${saveFlag} ${dependencies.join(' ')}`);
             console.log('\n🏁  Uninstalled:', dependencies);
         }
-    }
+    });
 })();
