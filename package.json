@@ -1,6 +1,6 @@
 {
 	"name": "npm-uninstall",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"description": "uninstall your npm dependencies",
 	"author": "Evans Owino",
 	"homepage": "https://github.com/eowino/npm-uninstall",
