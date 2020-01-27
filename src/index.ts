@@ -28,6 +28,11 @@ async function inquireDependencies({ dependencies, devDependencies, optionalDepe
 
     const depsChoice: string[] = [];
 
+    if (!choice.length) {
+        console.log('\nYou must select which dependencies you would like to delete.');
+        process.exit();
+    }
+
     if (choice.includes(DependencyType.DEPENDENCIES)) {
         depsChoice.push(...dependencies);
     }
@@ -38,6 +43,11 @@ async function inquireDependencies({ dependencies, devDependencies, optionalDepe
 
     if (choice.includes(DependencyType.OPTIONAL_DEPENDENCIES)) {
         depsChoice.push(...optionalDependencies);
+    }
+
+    if (!depsChoice.length) {
+        console.log('\nNo dependencies found. Exiting process 🏁');
+        process.exit();
     }
 
     const { depsToDelete }: { depsToDelete: string[] } = await inquirer.prompt({
