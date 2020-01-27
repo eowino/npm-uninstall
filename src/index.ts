@@ -15,6 +15,7 @@ enum DependencyType {
     OPTIONAL_DEPENDENCIES = 'optionalDependencies'
 }
 
+const NPM_CMD = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const MAX_CLIMB = 10;
 
 async function inquireDependencies({ dependencies, devDependencies, optionalDependencies }: IDependencies) {
@@ -152,7 +153,7 @@ function getDependencyType(depsToDelete: string[], allDependencies: IDependencie
 
         if (dependencies.length) {
             console.log('\n🛠  Uninstalling:', dependencies);
-            execSync(`npm uninstall --${saveFlag} ${dependencies.join(' ')}`);
+            execSync(`${NPM_CMD} uninstall --${saveFlag} ${dependencies.join(' ')}`);
             console.log('\n🏁  Uninstalled:', dependencies);
         }
     });
